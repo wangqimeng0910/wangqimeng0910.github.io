@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="冰红茶">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="HTTP相关知识1.键入网址到网页显示1.浏览器做的第一步工作是解析 URL，对 URL 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。 2.进行DNS解析（递归和迭代）：将域名解析成IP地址 3.通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的协议栈。 4.在 HTTP 传输数据之前，首先需要 TCP 建立连">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web相关知识">
+<meta property="og:url" content="http://example.com/2023/10/12/Web%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HTTP相关知识1.键入网址到网页显示1.浏览器做的第一步工作是解析 URL，对 URL 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。 2.进行DNS解析（递归和迭代）：将域名解析成IP地址 3.通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的协议栈。 4.在 HTTP 传输数据之前，首先需要 TCP 建立连">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210136196.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210300986.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210358855.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210644840.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211018848.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211123361.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211439888.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211513618.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211538145.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211801367.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211554409.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212923334.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212954347.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012214122997.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215048011.png">
+<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215809720.png">
+<meta property="article:published_time" content="2023-10-12T12:38:48.000Z">
+<meta property="article:modified_time" content="2023-10-12T13:59:43.039Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="秋招-Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png">
+  
+  
+  
+  <title>Web相关知识 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"P2Cpc6lvLMUQtZgsW53ZKoJr-gzGzoHsz","app_key":"FG06QwK7ytaQLAShY5fsaH4y","server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/moon.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Web相关知识"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-12 20:38" pubdate>
+          2023年10月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Web相关知识</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="HTTP相关知识"><a href="#HTTP相关知识" class="headerlink" title="HTTP相关知识"></a>HTTP相关知识</h1><h2 id="1-键入网址到网页显示"><a href="#1-键入网址到网页显示" class="headerlink" title="1.键入网址到网页显示"></a>1.键入网址到网页显示</h2><p>1.浏览器做的第一步工作是解析 URL，对 URL 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。</p>
+<p>2.进行DNS解析（递归和迭代）：将域名解析成IP地址</p>
+<p>3.通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的<strong>协议栈</strong>。</p>
+<p>4.在 HTTP 传输数据之前，首先需要 TCP 建立连接，TCP 连接的建立，通常称为<strong>三次握手</strong>。</p>
+<p>5.TCP 模块在执行连接、收发、断开等各阶段操作时，都需要委托 IP 模块将数据封装成<strong>网络包</strong>发送给通信对象。</p>
+<p>6.生成了 IP 头部之后，接下来网络包还需要在 IP 头部的前面加上 <strong>MAC 头部</strong>。</p>
+<p>7.网络包只是存放在内存中的一串二进制数字信息，没有办法直接发送给对方。因此，我们需要将<strong>数字信息转换为电信号</strong>，才能在网线上传输，也就是说，这才是真正的数据发送过程。</p>
+<p>8.交换机的设计是将网络包<strong>原样</strong>转发到目的地。交换机工作在 MAC 层，也称为<strong>二层网络设备</strong>。</p>
+<p>9.网络包经过交换机之后，现在到达了<strong>路由器</strong>，并在此被转发到下一个路由器或目标设备。</p>
+<p>10.数据包抵达服务器后，服务器会先扒开数据包的 MAC 头部，查看是否和服务器自己的 MAC 地址符合，符合就将包收起来。接着继续扒开数据包的 IP 头，发现 IP 地址符合，根据 IP 头中协议项，知道自己上层是 TCP 协议。于是，扒开 TCP 的头，里面有序列号，需要看一看这个序列包是不是我想要的，如果是就放入缓存中然后返回一个 ACK，如果不是就丢弃。TCP 头部里面还有端口号， HTTP 的服务器正在监听这个端口号。于是，服务器自然就知道是 HTTP 进程想要这个包，于是就将包发给 HTTP 进程。</p>
+<p>11.浏览器解析渲染页面</p>
+<p>12.TCP四次挥手</p>
+<h2 id="2-HTTP报文"><a href="#2-HTTP报文" class="headerlink" title="2.HTTP报文"></a>2.HTTP报文</h2><h3 id="2-1-HTTP请求报文"><a href="#2-1-HTTP请求报文" class="headerlink" title="2.1 HTTP请求报文"></a>2.1 HTTP请求报文</h3><p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png" srcset="/img/loading.gif" lazyload alt="image-20231012205223836"></p>
+<p>真实数据</p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210136196.png" srcset="/img/loading.gif" lazyload alt="image-20231012210136196"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210300986.png" srcset="/img/loading.gif" lazyload alt="image-20231012210300986"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210358855.png" srcset="/img/loading.gif" lazyload alt="image-20231012210358855"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210644840.png" srcset="/img/loading.gif" lazyload alt="image-20231012210644840"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211018848.png" srcset="/img/loading.gif" lazyload alt="image-20231012211018848"></p>
+<h3 id="2-2-HTTP响应报文"><a href="#2-2-HTTP响应报文" class="headerlink" title="2.2 HTTP响应报文"></a>2.2 HTTP响应报文</h3><p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211123361.png" srcset="/img/loading.gif" lazyload alt="image-20231012211123361"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211439888.png" srcset="/img/loading.gif" lazyload alt="image-20231012211439888"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211513618.png" srcset="/img/loading.gif" lazyload alt="image-20231012211513618"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211538145.png" srcset="/img/loading.gif" lazyload alt="image-20231012211538145"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211801367.png" srcset="/img/loading.gif" lazyload alt="image-20231012211801367"></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211554409.png" srcset="/img/loading.gif" lazyload alt="image-20231012211554409"></p>
+<h2 id="3-HTTP和HTTPS的区别"><a href="#3-HTTP和HTTPS的区别" class="headerlink" title="3.HTTP和HTTPS的区别"></a>3.HTTP和HTTPS的区别</h2><p>HTTP 是一种 <code>超文本传输协议(Hypertext Transfer Protocol)</code>，<strong>HTTP 是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范</strong></p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212923334.png" srcset="/img/loading.gif" lazyload alt="image-20231012212923334"></p>
+<p>而 HTTPS 的全称是 <code>Hypertext Transfer Protocol Secure</code>，从名称我们可以看出 HTTPS 要比 HTTPS 多了 secure 安全性这个概念，实际上， HTTPS 并不是一个新的应用层协议，它其实就是 <strong>HTTP + TLS&#x2F;SSL 协议</strong>组合而成，而安全性的保证正是 TLS&#x2F;SSL 所做的工作。</p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212954347.png" srcset="/img/loading.gif" lazyload alt="image-20231012212954347"></p>
+<p>HTTP 是未经安全加密的协议，它的传输过程容易被攻击者监听、数据容易被窃取、发送方和接收方容易被伪造；</p>
+<p>而 HTTPS 是安全的协议，它通过 <strong>密钥交换算法 - 签名算法 - 对称加密算法 - 摘要算法</strong> 能够解决上面这些问题。</p>
+<p>HTTP 的默认端口是 80，而 HTTPS 的默认端口是 443</p>
+<h2 id="4-HTTPS的工作原理"><a href="#4-HTTPS的工作原理" class="headerlink" title="4.HTTPS的工作原理"></a>4.HTTPS的工作原理</h2><p>我们探讨 HTTPS 的握手过程，其实就是 SSL&#x2F;TLS 的握手过程。</p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012214122997.png" srcset="/img/loading.gif" lazyload alt="image-20231012214122997"></p>
+<h2 id="5-HTTP-Get和Post区别"><a href="#5-HTTP-Get和Post区别" class="headerlink" title="5.HTTP Get和Post区别"></a>5.HTTP Get和Post区别</h2><p>1.Get 方法一般用于请求，比如你在浏览器地址栏输入 <code>www.cxuanblog.com</code> 其实就是发送了一个 Get 请求，它的主要特征是请求服务器返回资源，而 Post 方法一般用于 <code>&lt;form&gt; 表单</code>的提交，相当于是把信息提交给服务器，等待服务器作出响应，Get 相当于一个是 pull&#x2F;拉的操作，而 Post 相当于是一个 push&#x2F;推的操作。</p>
+<p>2.Get 方法是不安全的，因为你在发送请求的过程中，你的请求参数会拼在 URL 后面，从而导致容易被攻击者窃取，对你的信息造成破坏和伪造,post 方法是把参数放在请求体 body 中的，这对用户来说不可见。</p>
+<p>3.Get 请求的 URL 有长度限制，而Post 请求会把参数和值放在消息体中，对数据长度没有要求。</p>
+<p>4.Get 请求在发送过程中会产生一个 TCP 数据包；Post 在发送过程中会产生两个 TCP 数据包。对于 Get 方式的请求，浏览器会把 Gttp Header 和 Data 一并发送出去，服务器响应 200（返回数据）；而对于 Post，浏览器先发送 Header，服务器响应 100 continue，浏览器再发送 Data，服务器响应 200 ok（返回数据）。</p>
+<p>5.Post能发送更多的数据类型（Get只能发送ASCII字符）</p>
+<h2 id="6-什么是无状态协议，HTTP-是无状态协议吗，怎么解决"><a href="#6-什么是无状态协议，HTTP-是无状态协议吗，怎么解决" class="headerlink" title="6.什么是无状态协议，HTTP 是无状态协议吗，怎么解决"></a>6.什么是无状态协议，HTTP 是无状态协议吗，怎么解决</h2><p>无状态协议(Stateless Protocol) 就是指<strong>浏览器对于事务的处理没有记忆能力</strong>。举个例子来说就是比如客户请求获得网页之后关闭浏览器，然后再次启动浏览器，登录该网站，但是服务器并不知道客户关闭了一次浏览器。</p>
+<p>HTTP 就是一种无状态的协议，他对用户的操作没有记忆能力。可能大多数用户不相信，他可能觉得每次输入用户名和密码登陆一个网站后，下次登陆就不再重新输入用户名和密码了。这其实不是 HTTP 做的事情，起作用的是一个叫做 <strong>小甜饼(Cookie)<strong>的机制。它能够让浏览器具有</strong>记忆</strong>能力。</p>
+<p>当你想服务端发送请求时，服务端会给你发送一个认证信息，服务器第一次接收到请求时，开辟了一块 Session 空间（创建了Session对象），同时生成一个 sessionId ，并通过响应头的 **Set-Cookie：XXXXXXX **命令，向客户端发送要求设置 Cookie 的响应； 客户端收到响应后，在本机客户端设置了一个 **XXXXXXX **的 Cookie 信息，该 Cookie 的过期时间为浏览器会话结束；</p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215048011.png" srcset="/img/loading.gif" lazyload alt="image-20231012215048011"></p>
+<p>接下来客户端每次向同一个网站发送请求时，请求头都会带上该 Cookie信息（包含 sessionId ）， 然后，服务器通过读取请求头中的 Cookie 信息，获取名称为 JSESSIONID 的值，得到此次请求的 sessionId。这样，你的浏览器才具有了记忆能力。</p>
+<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215809720.png" srcset="/img/loading.gif" lazyload alt="image-20231012215809720"></p>
+<p>7.Cookie与Session区别</p>
+<p>(1) cookie数据存放在客户的浏览器上，session数据放在服务器上<br>(2) cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗,如果主要考虑到安全应当使用session<br>(3) session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能，如果主要考虑到减轻服务器性能方面，应当使用COOKIE<br>(4) 单个cookie在客户端的限制是3K，就是说一个站点在客户端存放的COOKIE不能3K。<br>(5) 所以：将登陆信息等重要信息存放为SESSION;其他信息如果需要保留，可以放在COOKIE中</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%8B%E6%8B%9B/" class="category-chain-item">秋招</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A7%8B%E6%8B%9B-Web/" class="print-no-link">#秋招-Web</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Web相关知识</div>
+      <div>http://example.com/2023/10/12/Web相关知识/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>冰红茶</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/10/liunx-IO/" title="liunx-IO">
+                        <span class="hidden-mobile">liunx-IO</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"P2Cpc6lvLMUQtZgsW53ZKoJr-gzGzoHsz","appKey":"FG06QwK7ytaQLAShY5fsaH4y","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/background.js"></script>
+<script src="/alec_diy/live2d-widget/autoload.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
