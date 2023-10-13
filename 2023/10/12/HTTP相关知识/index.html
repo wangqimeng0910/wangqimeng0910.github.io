@@ -18,38 +18,42 @@
   
     <meta name="description" content="HTTP相关知识1.键入网址到网页显示1.浏览器做的第一步工作是解析 URL，对 URL 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。 2.进行DNS解析（递归和迭代）：将域名解析成IP地址 3.通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的协议栈。 4.在 HTTP 传输数据之前，首先需要 TCP 建立连">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HTTP相关知识">
+<meta property="og:title" content="Web相关知识">
 <meta property="og:url" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="HTTP相关知识1.键入网址到网页显示1.浏览器做的第一步工作是解析 URL，对 URL 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。 2.进行DNS解析（递归和迭代）：将域名解析成IP地址 3.通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的协议栈。 4.在 HTTP 传输数据之前，首先需要 TCP 建立连">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210136196.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210300986.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210358855.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210644840.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211018848.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211123361.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211439888.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211513618.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211538145.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211801367.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211554409.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212923334.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212954347.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012214122997.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215048011.png">
-<meta property="og:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215809720.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012205223836.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012210136196.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012210300986.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012210358855.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012210644840.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211018848.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211123361.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211439888.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211513618.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211538145.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211801367.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012211554409.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012212923334.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012212954347.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012214122997.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012215048011.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012215809720.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012220255825.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012220308488.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012220321081.png">
+<meta property="og:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012220333020.png">
 <meta property="article:published_time" content="2023-10-12T12:38:48.000Z">
-<meta property="article:modified_time" content="2023-10-12T14:05:19.008Z">
+<meta property="article:modified_time" content="2023-10-13T02:03:44.880Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="秋招-Web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png">
+<meta name="twitter:image" content="http://example.com/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users/tony/AppData/Roaming/Typora/typora-user-images/image-20231012205223836.png">
   
   
   
-  <title>HTTP相关知识 - Hexo</title>
+  <title>Web相关知识 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -248,7 +252,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="HTTP相关知识"></span>
+            <span id="subtitle" data-typed-text="Web相关知识"></span>
           
         </div>
 
@@ -327,7 +331,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">HTTP相关知识</h1>
+            <h1 id="seo-header">Web相关知识</h1>
             
             
               <div class="markdown-body">
@@ -344,28 +348,28 @@
 <p>10.数据包抵达服务器后，服务器会先扒开数据包的 MAC 头部，查看是否和服务器自己的 MAC 地址符合，符合就将包收起来。接着继续扒开数据包的 IP 头，发现 IP 地址符合，根据 IP 头中协议项，知道自己上层是 TCP 协议。于是，扒开 TCP 的头，里面有序列号，需要看一看这个序列包是不是我想要的，如果是就放入缓存中然后返回一个 ACK，如果不是就丢弃。TCP 头部里面还有端口号， HTTP 的服务器正在监听这个端口号。于是，服务器自然就知道是 HTTP 进程想要这个包，于是就将包发给 HTTP 进程。</p>
 <p>11.浏览器解析渲染页面</p>
 <p>12.TCP四次挥手</p>
-<h2 id="2-HTTP报文"><a href="#2-HTTP报文" class="headerlink" title="2.HTTP报文"></a>2.HTTP报文</h2><h3 id="2-1-HTTP请求报文"><a href="#2-1-HTTP请求报文" class="headerlink" title="2.1 HTTP请求报文"></a>2.1 HTTP请求报文</h3><p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png" srcset="/img/loading.gif" lazyload alt="image-20231012205223836"></p>
+<h2 id="2-HTTP报文"><a href="#2-HTTP报文" class="headerlink" title="2.HTTP报文"></a>2.HTTP报文</h2><h3 id="2-1-HTTP请求报文"><a href="#2-1-HTTP请求报文" class="headerlink" title="2.1 HTTP请求报文"></a>2.1 HTTP请求报文</h3><p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012205223836.png" srcset="/img/loading.gif" lazyload alt="image-20231012205223836"></p>
 <p>真实数据</p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210136196.png" srcset="/img/loading.gif" lazyload alt="image-20231012210136196"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210300986.png" srcset="/img/loading.gif" lazyload alt="image-20231012210300986"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210358855.png" srcset="/img/loading.gif" lazyload alt="image-20231012210358855"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210644840.png" srcset="/img/loading.gif" lazyload alt="image-20231012210644840"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211018848.png" srcset="/img/loading.gif" lazyload alt="image-20231012211018848"></p>
-<h3 id="2-2-HTTP响应报文"><a href="#2-2-HTTP响应报文" class="headerlink" title="2.2 HTTP响应报文"></a>2.2 HTTP响应报文</h3><p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211123361.png" srcset="/img/loading.gif" lazyload alt="image-20231012211123361"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211439888.png" srcset="/img/loading.gif" lazyload alt="image-20231012211439888"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211513618.png" srcset="/img/loading.gif" lazyload alt="image-20231012211513618"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211538145.png" srcset="/img/loading.gif" lazyload alt="image-20231012211538145"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211801367.png" srcset="/img/loading.gif" lazyload alt="image-20231012211801367"></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211554409.png" srcset="/img/loading.gif" lazyload alt="image-20231012211554409"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210136196.png" srcset="/img/loading.gif" lazyload alt="image-20231012210136196"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210300986.png" srcset="/img/loading.gif" lazyload alt="image-20231012210300986"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210358855.png" srcset="/img/loading.gif" lazyload alt="image-20231012210358855"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012210644840.png" srcset="/img/loading.gif" lazyload alt="image-20231012210644840"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211018848.png" srcset="/img/loading.gif" lazyload alt="image-20231012211018848"></p>
+<h3 id="2-2-HTTP响应报文"><a href="#2-2-HTTP响应报文" class="headerlink" title="2.2 HTTP响应报文"></a>2.2 HTTP响应报文</h3><p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211123361.png" srcset="/img/loading.gif" lazyload alt="image-20231012211123361"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211439888.png" srcset="/img/loading.gif" lazyload alt="image-20231012211439888"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211513618.png" srcset="/img/loading.gif" lazyload alt="image-20231012211513618"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211538145.png" srcset="/img/loading.gif" lazyload alt="image-20231012211538145"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211801367.png" srcset="/img/loading.gif" lazyload alt="image-20231012211801367"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012211554409.png" srcset="/img/loading.gif" lazyload alt="image-20231012211554409"></p>
 <h2 id="3-HTTP和HTTPS的区别"><a href="#3-HTTP和HTTPS的区别" class="headerlink" title="3.HTTP和HTTPS的区别"></a>3.HTTP和HTTPS的区别</h2><p>HTTP 是一种 <code>超文本传输协议(Hypertext Transfer Protocol)</code>，<strong>HTTP 是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范</strong></p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212923334.png" srcset="/img/loading.gif" lazyload alt="image-20231012212923334"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212923334.png" srcset="/img/loading.gif" lazyload alt="image-20231012212923334"></p>
 <p>而 HTTPS 的全称是 <code>Hypertext Transfer Protocol Secure</code>，从名称我们可以看出 HTTPS 要比 HTTPS 多了 secure 安全性这个概念，实际上， HTTPS 并不是一个新的应用层协议，它其实就是 <strong>HTTP + TLS&#x2F;SSL 协议</strong>组合而成，而安全性的保证正是 TLS&#x2F;SSL 所做的工作。</p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212954347.png" srcset="/img/loading.gif" lazyload alt="image-20231012212954347"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012212954347.png" srcset="/img/loading.gif" lazyload alt="image-20231012212954347"></p>
 <p>HTTP 是未经安全加密的协议，它的传输过程容易被攻击者监听、数据容易被窃取、发送方和接收方容易被伪造；</p>
 <p>而 HTTPS 是安全的协议，它通过 <strong>密钥交换算法 - 签名算法 - 对称加密算法 - 摘要算法</strong> 能够解决上面这些问题。</p>
 <p>HTTP 的默认端口是 80，而 HTTPS 的默认端口是 443</p>
 <h2 id="4-HTTPS的工作原理"><a href="#4-HTTPS的工作原理" class="headerlink" title="4.HTTPS的工作原理"></a>4.HTTPS的工作原理</h2><p>我们探讨 HTTPS 的握手过程，其实就是 SSL&#x2F;TLS 的握手过程。</p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012214122997.png" srcset="/img/loading.gif" lazyload alt="image-20231012214122997"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012214122997.png" srcset="/img/loading.gif" lazyload alt="image-20231012214122997"></p>
 <h2 id="5-HTTP-Get和Post区别"><a href="#5-HTTP-Get和Post区别" class="headerlink" title="5.HTTP Get和Post区别"></a>5.HTTP Get和Post区别</h2><p>1.Get 方法一般用于请求，比如你在浏览器地址栏输入 <code>www.cxuanblog.com</code> 其实就是发送了一个 Get 请求，它的主要特征是请求服务器返回资源，而 Post 方法一般用于 <code>&lt;form&gt; 表单</code>的提交，相当于是把信息提交给服务器，等待服务器作出响应，Get 相当于一个是 pull&#x2F;拉的操作，而 Post 相当于是一个 push&#x2F;推的操作。</p>
 <p>2.Get 方法是不安全的，因为你在发送请求的过程中，你的请求参数会拼在 URL 后面，从而导致容易被攻击者窃取，对你的信息造成破坏和伪造,post 方法是把参数放在请求体 body 中的，这对用户来说不可见。</p>
 <p>3.Get 请求的 URL 有长度限制，而Post 请求会把参数和值放在消息体中，对数据长度没有要求。</p>
@@ -374,11 +378,19 @@
 <h2 id="6-什么是无状态协议，HTTP-是无状态协议吗，怎么解决"><a href="#6-什么是无状态协议，HTTP-是无状态协议吗，怎么解决" class="headerlink" title="6.什么是无状态协议，HTTP 是无状态协议吗，怎么解决"></a>6.什么是无状态协议，HTTP 是无状态协议吗，怎么解决</h2><p>无状态协议(Stateless Protocol) 就是指<strong>浏览器对于事务的处理没有记忆能力</strong>。举个例子来说就是比如客户请求获得网页之后关闭浏览器，然后再次启动浏览器，登录该网站，但是服务器并不知道客户关闭了一次浏览器。</p>
 <p>HTTP 就是一种无状态的协议，他对用户的操作没有记忆能力。可能大多数用户不相信，他可能觉得每次输入用户名和密码登陆一个网站后，下次登陆就不再重新输入用户名和密码了。这其实不是 HTTP 做的事情，起作用的是一个叫做 <strong>小甜饼(Cookie)<strong>的机制。它能够让浏览器具有</strong>记忆</strong>能力。</p>
 <p>当你想服务端发送请求时，服务端会给你发送一个认证信息，服务器第一次接收到请求时，开辟了一块 Session 空间（创建了Session对象），同时生成一个 sessionId ，并通过响应头的 **Set-Cookie：XXXXXXX **命令，向客户端发送要求设置 Cookie 的响应； 客户端收到响应后，在本机客户端设置了一个 **XXXXXXX **的 Cookie 信息，该 Cookie 的过期时间为浏览器会话结束；</p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215048011.png" srcset="/img/loading.gif" lazyload alt="image-20231012215048011"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215048011.png" srcset="/img/loading.gif" lazyload alt="image-20231012215048011"></p>
 <p>接下来客户端每次向同一个网站发送请求时，请求头都会带上该 Cookie信息（包含 sessionId ）， 然后，服务器通过读取请求头中的 Cookie 信息，获取名称为 JSESSIONID 的值，得到此次请求的 sessionId。这样，你的浏览器才具有了记忆能力。</p>
-<p><img src="C:\Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215809720.png" srcset="/img/loading.gif" lazyload alt="image-20231012215809720"></p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012215809720.png" srcset="/img/loading.gif" lazyload alt="image-20231012215809720"></p>
 <p>7.Cookie与Session区别</p>
 <p>(1) cookie数据存放在客户的浏览器上，session数据放在服务器上<br>(2) cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗,如果主要考虑到安全应当使用session<br>(3) session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能，如果主要考虑到减轻服务器性能方面，应当使用COOKIE<br>(4) 单个cookie在客户端的限制是3K，就是说一个站点在客户端存放的COOKIE不能3K。<br>(5) 所以：将登陆信息等重要信息存放为SESSION;其他信息如果需要保留，可以放在COOKIE中</p>
+<h2 id="7-HTTP常见请求头"><a href="#7-HTTP常见请求头" class="headerlink" title="7.HTTP常见请求头"></a>7.HTTP常见请求头</h2><p>通用标头</p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012220255825.png" srcset="/img/loading.gif" lazyload alt="image-20231012220255825"></p>
+<p>实体标头</p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012220308488.png" srcset="/img/loading.gif" lazyload alt="image-20231012220308488"></p>
+<p>请求标头</p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012220321081.png" srcset="/img/loading.gif" lazyload alt="image-20231012220321081"></p>
+<p>响应标头</p>
+<p><img src="/2023/10/12/HTTP%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/Users\tony\AppData\Roaming\Typora\typora-user-images\image-20231012220333020.png" srcset="/img/loading.gif" lazyload alt="image-20231012220333020"></p>
 
                 
               </div>
@@ -424,7 +436,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>HTTP相关知识</div>
+      <div>Web相关知识</div>
       <div>http://example.com/2023/10/12/HTTP相关知识/</div>
     </div>
     <div class="license-meta">
@@ -468,6 +480,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/10/13/sss/" title="sss">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sss</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
