@@ -53,7 +53,7 @@
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%931/image-20231014153109952.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%931/image-20231014153242173.png">
 <meta property="article:published_time" content="2023-10-14T03:21:09.000Z">
-<meta property="article:modified_time" content="2023-10-14T07:41:40.165Z">
+<meta property="article:modified_time" content="2023-10-14T09:20:54.614Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="秋招-数据库">
 <meta name="twitter:card" content="summary_large_image">
@@ -283,7 +283,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.9k 字
         
       </span>
     
@@ -294,7 +294,7 @@
         
         
         
-          23 分钟
+          25 分钟
         
       </span>
     
@@ -406,6 +406,13 @@
 <p>1.delete ，delete from student order by math desc limit 3；标记为删除没真删，DML，用来删部分数据</p>
 <p>2.truncate，truncate table_name ；DDL，本质是新建一个表结构并删除之前的，DDL，删除所有行数据</p>
 <p>3.drop，drop table_name；DDL，本质是行数据+表结构一起删除</p>
+<p>4.分页查询：select 字段名 from 表 limit 初始位置，记录条数</p>
+<p>5.insert into std (id,name,score) values(xxxxxx)</p>
+<p>6.delete from stu where</p>
+<p>7.update stu set name&#x3D;xxx,where name&#x3D;xx</p>
+<p>SQL语句的连接分为内连接、外连接</p>
+<p>内连接：利用条件表达式来消除交叉连接，如果没有连接条件就和cross join一样，都是在笛卡尔积商上进行处理</p>
+<p>外连接：分为左外连接、右外连接、全连接（mysql没有）</p>
 <h2 id="3-索引"><a href="#3-索引" class="headerlink" title="3.索引"></a>3.索引</h2><h3 id="3-1-用户记录是如何存放的？（索引的引入）"><a href="#3-1-用户记录是如何存放的？（索引的引入）" class="headerlink" title="3.1 用户记录是如何存放的？（索引的引入）"></a>3.1 用户记录是如何存放的？（索引的引入）</h3><p>我们平时都是以记录为单位向MySQL的表中插入数据的，这些记录在磁盘中的存放的格式就是InnoDB的行格式。</p>
 <img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%931/image-20231014151052208.png" srcset="/img/loading.gif" lazyload class title="image-20231014151052208">
 
