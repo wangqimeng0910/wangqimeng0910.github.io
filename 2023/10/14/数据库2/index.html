@@ -40,14 +40,17 @@
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232006679.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232153209.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232356249.png">
+<meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220311901.png">
+<meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220340221.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233136249.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233627611.png">
+<meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220250583.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233948808.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233957539.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015234018336.png">
 <meta property="og:image" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231016230053131.png">
 <meta property="article:published_time" content="2023-10-14T09:21:30.000Z">
-<meta property="article:modified_time" content="2023-10-16T15:10:23.571Z">
+<meta property="article:modified_time" content="2023-10-22T14:03:48.138Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="秋招-数据库">
 <meta name="twitter:card" content="summary_large_image">
@@ -424,7 +427,11 @@
 <img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232356249.png" srcset="/img/loading.gif" lazyload class title="image-20231015232356249">
 
 <p>当SELECT没有被临键锁的范围覆盖时，还是会复用之前的ReadView，这时就没有发送幻读</p>
-<h2 id="3-数据库日志"><a href="#3-数据库日志" class="headerlink" title="3.数据库日志"></a>3.数据库日志</h2><h3 id="3-1-重做日志"><a href="#3-1-重做日志" class="headerlink" title="3.1 重做日志"></a>3.1 重做日志</h3><p>重做日志（redo log）是InnoDB引擎层的日志，用来记录事务操作引起数据的变化，记录的是数据页的物理修改。</p>
+<h2 id="3-数据库日志"><a href="#3-数据库日志" class="headerlink" title="3.数据库日志"></a>3.数据库日志</h2><h3 id="3-1-重做日志（redo-log）"><a href="#3-1-重做日志（redo-log）" class="headerlink" title="3.1 重做日志（redo log）"></a>3.1 重做日志（redo log）</h3><img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220311901.png" srcset="/img/loading.gif" lazyload class title="image-20231022220311901">
+
+<img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220340221.png" srcset="/img/loading.gif" lazyload class title="image-20231022220340221">
+
+<p>重做日志（redo log）是InnoDB引擎层的日志，用来记录事务操作引起数据的变化，记录的是数据页的物理修改。</p>
 <p>InnoDB引擎对数据的更新，是<strong>先将更新记录写入redo log日志</strong>，然后会在系统<strong>空闲</strong>的时候或者是按照设定的更新策略再将日志中的内容更新到磁盘之中。这就是所谓的<strong>预写式技术（Write Ahead logging）</strong>。这种技术可以大大减少IO操作的频率，提升数据刷新的效率。</p>
 <img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233136249.png" srcset="/img/loading.gif" lazyload class title="image-20231015233136249">
 
@@ -445,8 +452,12 @@
 <p>在写入的过程中，还需要经过操作系统内核空间的<code>os buffer</code>。redo log日志的写入过程可见下图。</p>
 <img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233627611.png" srcset="/img/loading.gif" lazyload class title="image-20231015233627611">
 
-<h3 id="3-2-二进制日志（binlog）"><a href="#3-2-二进制日志（binlog）" class="headerlink" title="3.2 二进制日志（binlog）"></a>3.2 二进制日志（binlog）</h3><p>​	当事务对数据库进行修改，InnoDB引擎不仅会记录redo log，还会生成对应的undo log日志；如果事务执行失败或调用了rollback，导致事务需要回滚，就可以利用undo log中的信息将数据回滚到修改之前的样子。<br>​	但是undo log不redo log不一样，它属于<strong>逻辑日志</strong>。它对SQL语句执行相关的信息进行记录。当发生回滚时，InnoDB引擎会根据undo log日志中的记录做与之前相反的工作。比如对于每个数据插入操作（insert），回滚时会执行数据删除操作（delete）；对于每个数据删除操作（delete），回滚时会执行数据插入操作（insert）；对于每个数据更新操作（update），回滚时会执行一个相反的数据更新操作（update），把数据改回去。<strong>undo log由两个作用，一是提供回滚，二是实现MVCC</strong>。</p>
-<h3 id="3-3-二进制日志（binlog）"><a href="#3-3-二进制日志（binlog）" class="headerlink" title="3.3 二进制日志（binlog）"></a>3.3 二进制日志（binlog）</h3><p>二进制日志binlog是服务层的日志，还被称为归档日志。binlog主要记录数据库的变化情况，内容包括数据库所有的更新操作。所有涉及数据变动的操作，都要记录进二进制日志中。因此有了binlog可以很方便的对数据进行复制和备份，因而也常用作主从库的同步。<br>这里binlog所存储的内容看起来似乎与redo log很相似，但是其实不然。redo log是一种物理日志，记录的是实际上对某个数据进行了怎么样的修改；而binlog是逻辑日志，记录的是SQL语句的原始逻辑，比如”给ID&#x3D;2这一行的a字段加1 “。binlog日志中的内容是二进制的，根据日记格式参数的不同，可能基于SQL语句、基于数据本身或者二者的混合。一般常用记录的都是SQL语句。</p>
+
+
+<h3 id="3-2-回滚日志（undo-log）"><a href="#3-2-回滚日志（undo-log）" class="headerlink" title="3.2 回滚日志（undo log）"></a>3.2 回滚日志（undo log）</h3><img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220250583.png" srcset="/img/loading.gif" lazyload class title="image-20231022220250583">
+
+<p>​	当事务对数据库进行修改，InnoDB引擎不仅会记录redo log，还会生成对应的undo log日志；如果事务执行失败或调用了rollback，导致事务需要回滚，就可以利用undo log中的信息将数据回滚到修改之前的样子。<br>​	但是undo log不redo log不一样，它属于<strong>逻辑日志</strong>。它对SQL语句执行相关的信息进行记录。当发生回滚时，InnoDB引擎会根据undo log日志中的记录做与之前相反的工作。比如对于每个数据插入操作（insert），回滚时会执行数据删除操作（delete）；对于每个数据删除操作（delete），回滚时会执行数据插入操作（insert）；对于每个数据更新操作（update），回滚时会执行一个相反的数据更新操作（update），把数据改回去。<strong>undo log由两个作用，一是提供回滚，二是实现MVCC</strong>。</p>
+<h3 id="3-3-二进制日志（bin-log）"><a href="#3-3-二进制日志（bin-log）" class="headerlink" title="3.3 二进制日志（bin log）"></a>3.3 二进制日志（bin log）</h3><p>二进制日志binlog是服务层的日志，还被称为归档日志。binlog主要记录数据库的变化情况，内容包括数据库所有的更新操作。所有涉及数据变动的操作，都要记录进二进制日志中。因此有了binlog可以很方便的对数据进行复制和备份，因而也常用作主从库的同步。<br>这里binlog所存储的内容看起来似乎与redo log很相似，但是其实不然。redo log是一种物理日志，记录的是实际上对某个数据进行了怎么样的修改；而binlog是逻辑日志，记录的是SQL语句的原始逻辑，比如”给ID&#x3D;2这一行的a字段加1 “。binlog日志中的内容是二进制的，根据日记格式参数的不同，可能基于SQL语句、基于数据本身或者二者的混合。一般常用记录的都是SQL语句。</p>
 <p>同时，redo log是基于<code>crash recovery</code>，保证MySQL宕机后的数据恢复；而binlog是基于<code>point-in-time recovery</code>，保证服务器可以基于时间点对数据进行恢复，或者对数据进行备份。<br>事实上最开始MySQL是没有redo log日志的。因为起先MySQL是没有InnoDB引擎的，自带的引擎是MyISAM。binlog是服务层的日志，因此所有引擎都能够使用。但是光靠binlog日志只能提供归档的作用，无法提供<code>crash-safe</code>能力，所以InnoDB引擎就采用了学自于Oracle的技术，也就是redo log，这才拥有了<code>crash-safe</code>能力。这里对redo log日志和binlog日志的特点分别进行了对比：</p>
 <img src="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233948808.png" srcset="/img/loading.gif" lazyload class title="image-20231015233948808">
 
@@ -562,6 +573,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/10/22/%E6%95%B0%E6%8D%AE%E5%BA%933/" title="数据库3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
