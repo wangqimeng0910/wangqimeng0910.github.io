@@ -1,0 +1,892 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="冰红茶">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数据库21.事务1.1 事务的状态事务的状态有三种：Active、Commited、Failed  但是其实还有很多中间状态，比如部分提交，事务的状态图也会越来越复杂   Active：事务的初始状态，表示事务正在执行； Partially Commited：在最后一条语句执行之后； Failed：发现事务无法正常执行之后； Aborted：事务被回滚并且数据库恢复到了事务进行之前的状态之后； C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库-事务、隔离、日志">
+<meta property="og:url" content="http://example.com/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%93-%E4%BA%8B%E5%8A%A1%E3%80%81%E9%9A%94%E7%A6%BB%E3%80%81%E6%97%A5%E5%BF%97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据库21.事务1.1 事务的状态事务的状态有三种：Active、Commited、Failed  但是其实还有很多中间状态，比如部分提交，事务的状态图也会越来越复杂   Active：事务的初始状态，表示事务正在执行； Partially Commited：在最后一条语句执行之后； Failed：发现事务无法正常执行之后； Aborted：事务被回滚并且数据库恢复到了事务进行之前的状态之后； C">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014172910037.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014172950181.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173352748.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173217570.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173510293.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014174818199.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014175222304.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180524398.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180620939.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180804387.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180812441.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014203705388.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015231621744.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015231807060.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232006679.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232153209.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232356249.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220311901.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220340221.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233136249.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233627611.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220250583.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233948808.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233957539.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015234018336.png">
+<meta property="og:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231016230053131.png">
+<meta property="article:published_time" content="2023-10-14T09:21:30.000Z">
+<meta property="article:modified_time" content="2023-10-24T08:28:30.936Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="秋招-数据库">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014172910037.png">
+  
+  
+  
+  <title>数据库-事务、隔离、日志 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"P2Cpc6lvLMUQtZgsW53ZKoJr-gzGzoHsz","app_key":"FG06QwK7ytaQLAShY5fsaH4y","server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/moon.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据库-事务、隔离、日志"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-14 17:21" pubdate>
+          2023年10月14日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          53 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">数据库-事务、隔离、日志</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="数据库2"><a href="#数据库2" class="headerlink" title="数据库2"></a>数据库2</h1><h2 id="1-事务"><a href="#1-事务" class="headerlink" title="1.事务"></a>1.事务</h2><h3 id="1-1-事务的状态"><a href="#1-1-事务的状态" class="headerlink" title="1.1 事务的状态"></a>1.1 事务的状态</h3><p>事务的状态有三种：Active、Commited、Failed</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014172910037.png" srcset="/img/loading.gif" lazyload alt="image-20231014172910037"></p>
+<p>但是其实还有很多中间状态，比如部分提交，事务的状态图也会越来越复杂</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014172950181.png" srcset="/img/loading.gif" lazyload alt="image-20231014172950181"></p>
+<ul>
+<li>Active：事务的初始状态，表示事务正在执行；</li>
+<li>Partially Commited：在最后一条语句执行之后；</li>
+<li>Failed：发现事务无法正常执行之后；</li>
+<li>Aborted：事务被回滚并且数据库恢复到了事务进行之前的状态之后；</li>
+<li>Commited：成功执行整个事务；</li>
+</ul>
+<h3 id="1-2事务的四大特性（ACID"><a href="#1-2事务的四大特性（ACID" class="headerlink" title="1.2事务的四大特性（ACID)"></a>1.2事务的四大特性（ACID)</h3><h4 id="1-2-1-原子性"><a href="#1-2-1-原子性" class="headerlink" title="1.2.1 原子性"></a>1.2.1 原子性</h4><p>原子性是指事务是一个不可分割的工作单位，事务中的操作要么全部成功，要么全部失败。比如在同一个事务中的SQL语句，要么全部执行成功，要么全部执行失败。</p>
+<p><strong>原子性实现：</strong>想要保证事务的原子性，就需要在异常发生时，对已经执行的操作进行<strong>回滚</strong>，而在 MySQL 中，恢复机制是通过<em>回滚日志</em>（undo log）实现的，所有事务进行的修改都会先记录到这个回滚日志中，然后在对数据库中的对应行进行写入。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173352748.png" srcset="/img/loading.gif" lazyload alt="image-20231014173352748"></p>
+<p>回滚日志并不能将数据库物理地恢复到执行语句或者事务之前的样子；它是逻辑日志，当回滚日志被使用时，它只会按照日志<strong>逻辑地</strong>将数据库中的修改撤销掉看，可以<strong>理解</strong>为，我们在事务中使用的每一条 <code>INSERT</code> 都对应了一条 <code>DELETE</code>，每一条 <code>UPDATE</code> 也都对应一条相反的 <code>UPDATE</code> 语句。</p>
+<p><strong>级联回滚：</strong>在下图所示的一次事件中，Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<em>级联回滚</em>（Cascading Rollback），级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的，不过如果想要达到<strong>绝对的</strong>原子性，这件事情又是不得不去处理的。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173217570.png" srcset="/img/loading.gif" lazyload alt="image-20231014173217570"></p>
+<h4 id="1-2-2-持久性"><a href="#1-2-2-持久性" class="headerlink" title="1.2.2 持久性"></a>1.2.2 持久性</h4><p>既然是数据库，那么一定对数据的持久存储有着非常强烈的需求，如果数据被写入到数据库中，那么数据一定能够被安全存储在磁盘上；而事务的持久性就体现在，一旦事务被提交，那么数据一定会被写入到数据库中并持久存储起来。</p>
+<p><strong>持久性实现：</strong>与原子性一样，事务的持久性也是通过日志来实现的，MySQL 使用重做日志（redo log）实现事务的持久性，重做日志由两部分组成，一是内存中的重做日志缓冲区，因为重做日志缓冲区在内存中，所以它是易失的，另一个就是在磁盘上的重做日志文件，它是持久的。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014173510293.png" srcset="/img/loading.gif" lazyload alt="image-20231014173510293"></p>
+<p>当我们在一个事务中尝试对数据进行修改时，它<strong>会先将数据从磁盘读入内存，并更新内存中缓存的数据（数据一致性）</strong>，然后生成一条重做日志并写入重做日志缓存，当事务真正提交时，MySQL 会将<strong>重做日志缓存中的内容刷新到重做日志文件，再将内存中的数据更新到磁盘上</strong>，图中的第 4、5 步就是在事务提交时执行的。</p>
+<h4 id="1-2-3-隔离性"><a href="#1-2-3-隔离性" class="headerlink" title="1.2.3 隔离性"></a>1.2.3 隔离性</h4><p><strong>隔离级别：</strong></p>
+<ul>
+<li><code>RAED UNCOMMITED</code>（读未提交）：使用查询语句不会加锁，可能会读到未提交的行（Dirty Read（脏读））；</li>
+<li><code>READ COMMITED</code>（读提交）：只对记录加记录锁，而不会在记录之间加间隙锁，所以允许新的记录插入到被锁定记录的附近，所以再多次使用查询语句时，可能得到不同的结果（Non-Repeatable Read（不可重复读））；</li>
+<li><code>REPEATABLE READ</code>（可重复读）：多次读取同一范围的数据会返回第一次查询的快照，不会返回不同的数据行，但是可能发生幻读（Phantom Read）；</li>
+<li><code>SERIALIZABLE</code>（串行化）：InnoDB 隐式地将全部的查询语句加上共享锁，解决了幻读的问题；</li>
+</ul>
+<p><strong>隔离级别的实现：</strong>锁（共享锁和互斥锁）、时间戳（乐观锁，先对数据进行修改，写回时再去判断当前值，如果时间戳（或者版本）没有改变就写入，否则，再生成一个新的时间戳再更新数据）、多版本和快照隔离，具体内容后面会详细解释</p>
+<h4 id="1-2-4-一致性"><a href="#1-2-4-一致性" class="headerlink" title="1.2.4 一致性"></a>1.2.4 一致性</h4><p>数据库对于 ACID 中的一致性的定义是这样的：如果一个事务原子地在一个一致地数据库中独立运行，那么在它执行之后，数据库的状态一定是一致的。对于这个概念，它的第一层意思就是对于数据完整性的约束，包括主键约束、引用约束以及一些约束检查等等，在事务的执行的前后以及过程中不会违背对数据完整性的约束，所有对数据库写入的操作都应该是合法的，并不能产生不合法的数据状态。</p>
+<p>我们可以将事务理解成一个函数，它接受一个外界的 SQL 输入和一个一致的数据库，它一定会返回一个一致的数据库。</p>
+<p>而第二层意思其实是指逻辑上的对于开发者的要求，我们要在代码中写出正确的事务逻辑，比如银行转账，事务中的逻辑不可能只扣钱或者只加钱，这是应用层面上对于数据库一致性的要求。</p>
+<p>CAP 定理中的数据一致性，其实是说分布式系统中的各个节点中对于同一数据的拷贝有着相同的值；而 ACID 中的一致性是指数据库的规则，如果 schema 中规定了一个值必须是唯一的，那么一致的系统必须确保在所有的操作中，该值都是唯一的</p>
+<h2 id="2-事务四种隔离详解"><a href="#2-事务四种隔离详解" class="headerlink" title="2.事务四种隔离详解"></a>2.事务四种隔离详解</h2><p>首先，事务四种隔离级别为：</p>
+<ol>
+<li>读未提交（READ UNCOMMITTED）</li>
+<li>读提交 （READ COMMITTED）</li>
+<li>可重复读 （REPEATABLE READ）</li>
+<li>串行化 （SERIALIZABLE）</li>
+</ol>
+<h3 id="2-1-读未提交"><a href="#2-1-读未提交" class="headerlink" title="2.1 读未提交"></a>2.1 读未提交</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014174818199.png" srcset="/img/loading.gif" lazyload alt="image-20231014174818199"></p>
+<p>读未提交，其实就是可以读到其他事务未提交的数据，但没有办法保证你读到的数据最终一定是提交后的数据。这时候就会出现错误。</p>
+<p><strong>后果：</strong>导致读到其他脏数据</p>
+<p><strong>原因：</strong>因为记录并没有加锁，所有人都可以访问到</p>
+<p><strong>解决方案：</strong>对记录加记录锁，这时隔离级别就变成读提交了</p>
+<h3 id="2-2-读提交"><a href="#2-2-读提交" class="headerlink" title="2.2 读提交"></a>2.2 读提交</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014175222304.png" srcset="/img/loading.gif" lazyload alt="image-20231014175222304"></p>
+<p><strong>后果：</strong>后面读的数据和之前读的不一样，一般情况下不会出现问题，但是如果在数据库备份时，数据还有可能在不断修改，我们肯定希望备份整个数据库开始时的那个版本，而不希望备份的数据有些是之前那个时刻版本的，有些则是之后那个时间版本的。这样导致新来的数据覆盖掉了旧的数据，那么旧的数据就无法再找到了。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180524398.png" srcset="/img/loading.gif" lazyload alt="image-20231014180524398"></p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180620939.png" srcset="/img/loading.gif" lazyload alt="image-20231014180620939"></p>
+<p><strong>原因：</strong>因为对记录加了锁，所以这时候只能读到新数据</p>
+<p><strong>解决方案：</strong>MVCC（多版本和快照隔离），这时隔离级别变成了可重复读</p>
+<h3 id="2-3-可重复读"><a href="#2-3-可重复读" class="headerlink" title="2.3 可重复读"></a>2.3 可重复读</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180804387.png" srcset="/img/loading.gif" lazyload alt="image-20231014180804387"></p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014180812441.png" srcset="/img/loading.gif" lazyload alt="image-20231014180812441"></p>
+<p><strong>后果：</strong>两次查询结果不一样</p>
+<p><strong>原因：</strong>因为MVCC（多版本和快照隔离），其实有两种，第一种select是快照读，会保留之前的数据，但是update会给这个记录加锁，这样锁+select就变成了当前读，导致读出来的数据不一样了，通过next-key锁（间隙锁+记录锁)只锁住一部分区间使得有部分区间不会发送幻读</p>
+<p><strong>解决方案：</strong>加表锁，隔离级别变成串行化</p>
+<h3 id="2-4-串行化"><a href="#2-4-串行化" class="headerlink" title="2.4 串行化"></a>2.4 串行化</h3><p>加表锁，运行效率很低，但是隔离级别最高</p>
+<h3 id="2-5-MVCC机制"><a href="#2-5-MVCC机制" class="headerlink" title="2.5 MVCC机制"></a>2.5 MVCC机制</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231014203705388.png" srcset="/img/loading.gif" lazyload alt="image-20231014203705388"></p>
+<p>MVCC由Undo Log和Read View共同实现，Undo Log形成版本链，通过roll_potinter连接起来，并且记录对应的事务结果。</p>
+<p>Read View是select在查询时做的一个内存视图</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015231621744.png" srcset="/img/loading.gif" lazyload alt="image-20231015231621744"></p>
+<p>RC不可以解决可重复读，两次ReadView都不同</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015231807060.png" srcset="/img/loading.gif" lazyload alt="image-20231015231807060"></p>
+<p>RR隔离级别，复用之前ReadView</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232006679.png" srcset="/img/loading.gif" lazyload alt="image-20231015232006679"></p>
+<p>因为有临键锁，所有加锁的SELECT会变成当前读，导致出现幻读情况</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232153209.png" srcset="/img/loading.gif" lazyload alt="image-20231015232153209"></p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015232356249.png" srcset="/img/loading.gif" lazyload alt="image-20231015232356249"></p>
+<p>当SELECT没有被临键锁的范围覆盖时，还是会复用之前的ReadView，这时就没有发送幻读</p>
+<h2 id="3-数据库日志"><a href="#3-数据库日志" class="headerlink" title="3.数据库日志"></a>3.数据库日志</h2><h3 id="3-1-重做日志（redo-log）"><a href="#3-1-重做日志（redo-log）" class="headerlink" title="3.1 重做日志（redo log）"></a>3.1 重做日志（redo log）</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220311901.png" srcset="/img/loading.gif" lazyload alt="image-20231022220311901"></p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220340221.png" srcset="/img/loading.gif" lazyload alt="image-20231022220340221"></p>
+<p>重做日志（redo log）是InnoDB引擎层的日志，用来记录事务操作引起数据的变化，记录的是数据页的物理修改。</p>
+<p>InnoDB引擎对数据的更新，是<strong>先将更新记录写入redo log日志</strong>，然后会在系统<strong>空闲</strong>的时候或者是按照设定的更新策略再将日志中的内容更新到磁盘之中。这就是所谓的<strong>预写式技术（Write Ahead logging）</strong>。这种技术可以大大减少IO操作的频率，提升数据刷新的效率。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233136249.png" srcset="/img/loading.gif" lazyload alt="image-20231015233136249"></p>
+<p>redo log日志的大小是固定的，为了能够持续不断的对更新记录进行写入，在redo log日志中设置了两个标志位置，checkpoint和write_pos，分别表示记录擦除的位置和记录写入的位置。</p>
+<p>当<code>write_pos</code>追上<code>checkpoint</code>时，表示redo log日志已经写满。这时不能继续执行新的数据库更新语句，需要停下来先删除一些记录，执行<strong>checkpoint规则</strong>腾出可写空间。</p>
+<blockquote>
+<p><strong>checkpoint规则：</strong>checkpoint触发后，将buffer中脏数据页和脏日志页都刷到磁盘。<br><strong>脏数据</strong>：指内存中未刷到磁盘的数据。</p>
+</blockquote>
+<p>redo log中最重要的概念就是缓冲池<code>buffer pool</code>，这是在内存中分配的一个区域，包含了磁盘中部分数据页的映射，作为访问数据库的缓冲。</p>
+<blockquote>
+<p>当请求读取数据时，会先判断是否在缓冲池命中，如果未命中才会在磁盘上进行检索后放入缓冲池；<br>当请求写入数据时，会先写入缓冲池，缓冲池中修改的数据会定期刷新到磁盘中。这一过程也被称之为<strong>刷脏</strong> </p>
+</blockquote>
+<p>当数据修改时，除了修改<code>buffer pool</code>中的数据，还会在redo log中记录这次操作；当事务提交时，会根据redo log的记录对数据进行刷盘。如果MySQL宕机，重启时可以读取redo log中的数据，对数据库进行恢复，从而保证了事务的持久性，使得数据库获得<code>crash-safe</code>能力。</p>
+<h4 id="脏日志刷盘"><a href="#脏日志刷盘" class="headerlink" title="脏日志刷盘"></a>脏日志刷盘</h4><p>除了上面提到的对于脏数据的刷盘，实际上redo log日志在记录时，为了保证日志文件的持久化，也需要经历将日志记录从内存写入到磁盘的过程。redo log日志可分为两个部分，一是存在易失性内存中的缓存日志<code>redo log buff</code>，二是保存在磁盘上的redo log日志文件<code>redo log file</code>。<br>为了确保每次记录都能够写入到磁盘中的日志中，每次将<code>redo log buffer</code>中的日志写入<code>redo log file</code>的过程中都会调用一次操作系统的<code>fsync</code>操作。</p>
+<blockquote>
+<p>fsync函数：包含在UNIX系统头文件#include 中，用于同步内存中所有已修改的文件数据到储存设备。</p>
+</blockquote>
+<p>在写入的过程中，还需要经过操作系统内核空间的<code>os buffer</code>。redo log日志的写入过程可见下图。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233627611.png" srcset="/img/loading.gif" lazyload alt="image-20231015233627611"></p>
+<h3 id="3-2-回滚日志（undo-log）"><a href="#3-2-回滚日志（undo-log）" class="headerlink" title="3.2 回滚日志（undo log）"></a>3.2 回滚日志（undo log）</h3><p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231022220250583.png" srcset="/img/loading.gif" lazyload alt="image-20231022220250583"></p>
+<p>​	当事务对数据库进行修改，InnoDB引擎不仅会记录redo log，还会生成对应的undo log日志；如果事务执行失败或调用了rollback，导致事务需要回滚，就可以利用undo log中的信息将数据回滚到修改之前的样子。<br>​	但是undo log不redo log不一样，它属于<strong>逻辑日志</strong>。它对SQL语句执行相关的信息进行记录。当发生回滚时，InnoDB引擎会根据undo log日志中的记录做与之前相反的工作。比如对于每个数据插入操作（insert），回滚时会执行数据删除操作（delete）；对于每个数据删除操作（delete），回滚时会执行数据插入操作（insert）；对于每个数据更新操作（update），回滚时会执行一个相反的数据更新操作（update），把数据改回去。<strong>undo log由两个作用，一是提供回滚，二是实现MVCC</strong>。</p>
+<h3 id="3-3-二进制日志（bin-log）"><a href="#3-3-二进制日志（bin-log）" class="headerlink" title="3.3 二进制日志（bin log）"></a>3.3 二进制日志（bin log）</h3><p>二进制日志binlog是服务层的日志，还被称为归档日志。binlog主要记录数据库的变化情况，内容包括数据库所有的更新操作。所有涉及数据变动的操作，都要记录进二进制日志中。因此有了binlog可以很方便的对数据进行复制和备份，因而也常用作主从库的同步。<br>这里binlog所存储的内容看起来似乎与redo log很相似，但是其实不然。redo log是一种物理日志，记录的是实际上对某个数据进行了怎么样的修改；而binlog是逻辑日志，记录的是SQL语句的原始逻辑，比如”给ID&#x3D;2这一行的a字段加1 “。binlog日志中的内容是二进制的，根据日记格式参数的不同，可能基于SQL语句、基于数据本身或者二者的混合。一般常用记录的都是SQL语句。</p>
+<p>同时，redo log是基于<code>crash recovery</code>，保证MySQL宕机后的数据恢复；而binlog是基于<code>point-in-time recovery</code>，保证服务器可以基于时间点对数据进行恢复，或者对数据进行备份。<br>事实上最开始MySQL是没有redo log日志的。因为起先MySQL是没有InnoDB引擎的，自带的引擎是MyISAM。binlog是服务层的日志，因此所有引擎都能够使用。但是光靠binlog日志只能提供归档的作用，无法提供<code>crash-safe</code>能力，所以InnoDB引擎就采用了学自于Oracle的技术，也就是redo log，这才拥有了<code>crash-safe</code>能力。这里对redo log日志和binlog日志的特点分别进行了对比：</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233948808.png" srcset="/img/loading.gif" lazyload alt="image-20231015233948808"></p>
+<p>在MySQL执行更新语句时，都会涉及到redo log日志和binlog日志的读写。一条更新语句的执行过程如下：</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015233957539.png" srcset="/img/loading.gif" lazyload alt="image-20231015233957539"></p>
+<p>从上图可以看出，MySQL在执行更新语句的时候，在服务层进行语句的解析和执行，在引擎层进行数据的提取和存储；同时在服务层对binlog进行写入，在InnoDB内进行redo log的写入。<br>不仅如此，在对redo log写入时有两个阶段的提交，<strong>一是binlog写入之前prepare状态的写入</strong>，<strong>二是binlog写入之后commit状态的写入</strong>。<br>之所以要安排这么一个<strong>两阶段提交</strong>，自然是有它的道理的。现在我们可以假设不采用两阶段提交的方式，而是采用“单阶段”进行提交，即要么先写入redo log，后写入binlog；要么先写入binlog，后写入redo log。这两种方式的提交都会导致原先数据库的状态和被恢复后的数据库的状态不一致。</p>
+<h5 id="先写入redo-log，后写入binlog"><a href="#先写入redo-log，后写入binlog" class="headerlink" title="先写入redo log，后写入binlog"></a>先写入redo log，后写入binlog</h5><p>在写完redo log之后，数据此时具有crash-safe能力，因此系统崩溃，数据会恢复成事务开始之前的状态。但是，若在redo log写完时候，binlog写入之前，系统发生了宕机。此时binlog没有对上面的更新语句进行保存，导致当使用binlog进行数据库的备份或者恢复时，就少了上述的更新语句。从而使得<code>id=2</code>这一行的数据没有被更新。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231015234018336.png" srcset="/img/loading.gif" lazyload alt="image-20231015234018336"></p>
+<p>由此可见，两阶段的提交就是为了避免上述的问题，使得binlog和redo log中保存的信息是一致的。</p>
+<h3 id="4-主从复制"><a href="#4-主从复制" class="headerlink" title="4.主从复制"></a>4.主从复制</h3><p>主从复制的概念很简单，就是从原来的数据库复制一个完全一样的数据库，原来的数据库称作主数据库，复制的数据库称为从数据库。从数据库会与主数据库进行数据同步，保持二者的数据一致性。</p>
+<p>主从复制的原理实际上就是通过bin log日志实现的。bin log日志中保存了数据库中所有SQL语句，通过对bin log日志中SQL的复制，然后再进行语句的执行即可实现从数据库与主数据库的同步。</p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E5%BA%932/image-20231016230053131.png" srcset="/img/loading.gif" lazyload alt="image-20231016230053131"></p>
+<p>主从复制的过程主要是靠三个线程进行的，一个运行在主服务器中的发送线程，用于发送binlog日志到从服务器。两外两个运行在从服务器上的I&#x2F;O线程和SQL线程。I&#x2F;O线程用于读取主服务器发送过来的binlog日志内容，并拷贝到本地的中继日志中。SQL线程用于读取中继日志中关于数据更新的SQL语句并执行，从而实现主从库的数据一致。</p>
+<p>主从复制能够带来的好处有：</p>
+<blockquote>
+<ol>
+<li>通过复制实现数据的异地备份，当主数据库故障时，可切换从数据库，避免数据丢失。</li>
+<li>可实现架构的扩展，当业务量越来越大，I&#x2F;O访问频率过高时，采用多库的存储，可以降低磁盘I&#x2F;O访问的频率，提高单个机器的I&#x2F;O性能。</li>
+<li>可实现读写分离，使数据库能支持更大的并发。</li>
+<li>实现服务器的负载均衡，通过在主服务器和从服务器之间切分处理客户查询的负荷。</li>
+</ol>
+</blockquote>
+<h3 id="5-备注"><a href="#5-备注" class="headerlink" title="5.备注"></a>5.备注</h3><p>以上资料来源于<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/764178">为了让你彻底弄懂 MySQL 事务日志，我通宵赶出了这份图解！-阿里云开发者社区 (aliyun.com)</a>和<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1wu4y1d734/?spm_id_from=333.880.my_history.page.click&vd_source=0fb3165118535b2ba15fe8d267120151">动画讲解：MySQL的MVCC原理，RR不能完全解决幻读问题的底层原理，Undo版本链_哔哩哔哩_bilibili</a>有兴趣的友友可以去看原文和视频</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%8B%E6%8B%9B/" class="category-chain-item">秋招</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A7%8B%E6%8B%9B-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="print-no-link">#秋招-数据库</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据库-事务、隔离、日志</div>
+      <div>http://example.com/2023/10/14/数据库-事务、隔离、日志/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>冰红茶</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/22/%E6%95%B0%E6%8D%AE%E5%BA%93-%E9%94%81%E3%80%81%E6%AD%BB%E9%94%81%E3%80%81%E6%8E%92%E6%9F%A5/" title="数据库-锁、死锁、排查">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库-锁、死锁、排查</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/14/%E6%95%B0%E6%8D%AE%E5%BA%93-%E8%8C%83%E5%BC%8F%E3%80%81%E8%AF%AD%E8%A8%80%E3%80%81%E7%B4%A2%E5%BC%95/" title="数据库-范式、语言、索引">
+                        <span class="hidden-mobile">数据库-范式、语言、索引</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"P2Cpc6lvLMUQtZgsW53ZKoJr-gzGzoHsz","appKey":"FG06QwK7ytaQLAShY5fsaH4y","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/background.js"></script>
+<script src="/alec_diy/live2d-widget/autoload.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
